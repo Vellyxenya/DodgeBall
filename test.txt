@@ -1,0 +1,19 @@
+# Test 1
+#
+
+8
+
+4
+	x0	y0	nbt0	count0
+	x1	y1	nbt1	count1
+	x2	y2	nbt2	count2
+	x3	y3	nbt3	count3
+
+2
+	ligne0	colonne0
+	ligne1	colonne1
+	
+2
+	x0	y0	a0
+	x1	y1	a1
+	
