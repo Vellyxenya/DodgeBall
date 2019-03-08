@@ -3,6 +3,7 @@
 
 class Actor{
 	public:
+		Actor();
 		Actor(Tools::Coordinates& inCoos, unsigned int size);
 		~Actor();
 		
@@ -13,6 +14,8 @@ class Actor{
 		unsigned int getSize() const{
 			return size;
 		}
+		
+		void display(int&);
 		
 	protected:
 		Tools::Coordinates coos;

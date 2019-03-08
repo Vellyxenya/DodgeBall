@@ -4,8 +4,10 @@
 
 class Player : Actor{
 	public:
-		Player(Tools::Coordinates& inCoos, unsigned int size);
+		Player();
+		Player(Tools::Coordinates& inCoos, unsigned int size, unsigned int nbTouched, unsigned int coolDown);
 		~Player();
 		
 	private:
+		int nbTouched, coolDown;
 };

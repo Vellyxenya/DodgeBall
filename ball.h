@@ -4,8 +4,9 @@
 
 class Ball : Actor{
 	public:
-		Ball(Tools::Coordinates& inCoos, unsigned int size);
+		Ball(Tools::Coordinates& inCoos, unsigned int size, double angle);
 		~Ball();
 		
 	private:
+		double angle;
 };

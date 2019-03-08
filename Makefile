@@ -24,7 +24,7 @@ depend:
 
 clean:
 	@echo " *** EFFACE MODULES OBJET ET EXECUTABLE ***"
-	@/bin/rm -f *.o *.x *.c~ *.h~ *.gch~ prog
+	@/bin/rm -f *.o *.x *.c~ *.h~ *.h.gch~ prog
 
 #
 # -- Regles de dependances generees automatiquement
@@ -34,8 +34,10 @@ ball.o: ball.cc ball.h tools.h actor.h
 map.o: map.cc map.h actor.h tools.h define.h
 player.o: player.cc player.h tools.h actor.h
 tools.o: tools.cc tools.h
-projet.o: projet.cc simulation.h tools.h map.h actor.h define.h
+projet.o: projet.cc simulation.h define.h tools.h map.h actor.h player.h \
+ ball.h obstacle.h
 _errors_.o: _errors_.cc
-simulation.o: simulation.cc simulation.h tools.h map.h actor.h define.h
-obstacle.o: obstacle.cc
+simulation.o: simulation.cc simulation.h define.h tools.h map.h actor.h \
+ player.h ball.h obstacle.h
+obstacle.o: obstacle.cc obstacle.h tools.h actor.h
 actor.o: actor.cc actor.h tools.h
