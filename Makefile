@@ -4,7 +4,7 @@
 
 CC     = g++
 CFLAGS = -Wall -std=c++11 #evt rajouter -g avant -Wall
-CFILES = ball.cc map.cc player.cc tools.cc projet.cc _errors_.cc simulation.cc obstacle.cc actor.cc
+CFILES = ball.cc map.cc player.cc tools.cc projet.cc simulation.cc obstacle.cc actor.cc
 OFILES = $(CFILES:.cc=.o)
 
 # Definition de la premiere regle
@@ -36,7 +36,6 @@ player.o: player.cc player.h tools.h actor.h
 tools.o: tools.cc tools.h
 projet.o: projet.cc simulation.h define.h tools.h map.h actor.h player.h \
  ball.h obstacle.h
-_errors_.o: _errors_.cc
 simulation.o: simulation.cc simulation.h define.h tools.h map.h actor.h \
  player.h ball.h obstacle.h
 obstacle.o: obstacle.cc obstacle.h tools.h actor.h

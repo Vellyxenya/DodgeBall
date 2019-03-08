@@ -4,10 +4,10 @@
 class Actor{
 	public:
 		Actor();
-		Actor(Tools::Coordinates& inCoos, unsigned int size);
+		Actor(Coordinates& inCoos, unsigned int size);
 		~Actor();
 		
-		Tools::Coordinates getCoordinates() const{
+		Coordinates getCoordinates() const{
 			return coos;
 		}
 		
@@ -17,8 +17,9 @@ class Actor{
 		
 		void display(int&);
 		
-	protected:
-		Tools::Coordinates coos;
+		
+	//protected:
+		Coordinates coos;
 		unsigned int const size; //May be the radius(for player/ball) or half-side(for obstacle)
 		//Mettre const sur size?
 };

@@ -4,9 +4,9 @@
 
 class Obstacle{
 	public:
-		Obstacle(Tools::Coordinates& inCoos);
+		Obstacle(Coordinates& inCoos);
 		~Obstacle();
 		
 	private:
-	Tools::Coordinates coos;
+	Coordinates coos;
 };

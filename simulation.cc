@@ -2,7 +2,6 @@
 #include "simulation.h"
 #include <iostream>
 #include <fstream>
-#include "tools.h"
 #include <limits>
 
 #define NDEBUG
@@ -32,7 +31,10 @@ bool Simulation::analyzeData(){
 		exit
 		;
 	}*/
-
+	for(int i(0); i<=nbPlayer; ++i){
+	
+		players[i].getCoordinates();
+	}
 	return false;
 }
 
@@ -91,7 +93,7 @@ void Simulation::readData(string& fileName){
 				cout << "clearing" << endl;
 			}
 		} else {
-			Tools::Coordinates coos = {x,y};
+			Coordinates coos = {x,y};
 			Player player(coos, COEF_RAYON_JOUEUR*nbCell, nbTouched, coolDown);
 			players.push_back(player);
 			i++;
@@ -117,7 +119,7 @@ void Simulation::readData(string& fileName){
 				cout << "clearing" << endl;
 			}
 		} else {
-			Tools::Coordinates coos = {x,y};
+			Coordinates coos = {x,y};
 			Obstacle obstacle(coos);
 			obstacles.push_back(obstacle);
 			i++;
@@ -144,7 +146,7 @@ void Simulation::readData(string& fileName){
 				cout << "clearing" << endl;
 			}
 		} else {
-			Tools::Coordinates coos = {x,y};
+			Coordinates coos = {x,y};
 			Ball ball(coos, COEF_RAYON_BALLE*nbCell, angle);
 			balls.push_back(ball);
 			i++;

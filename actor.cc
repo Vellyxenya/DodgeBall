@@ -1,7 +1,7 @@
 #include "actor.h"
 #include <iostream>
 
-Actor::Actor(Tools::Coordinates& inCoos, unsigned int size) : coos(inCoos), size(size){
+Actor::Actor(Coordinates& inCoos, unsigned int size) : coos(inCoos), size(size){
 
 };
 

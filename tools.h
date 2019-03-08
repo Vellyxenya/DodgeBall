@@ -4,6 +4,12 @@
 /**
  * Class containing utility functions
  */
+ 
+ struct Coordinates{
+	double x;
+	double y;
+};
+ 
 class Tools{
 	public:
 		static bool isTxt(std::string fileName);
@@ -17,10 +23,7 @@ class Tools{
 			return true;
 		}
 		
-		struct Coordinates{
-			double x;
-			double y;
-		};
+		
 		
 	private:
 	
