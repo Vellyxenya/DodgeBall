@@ -32,27 +32,27 @@ bool chooseMode(int argc, char* argv[], Mode& mode){
 			break;
 			
 		case 2:
-			if (Tools::isTxt(argv[1]))	mode = Normal;
+			if (Tools::isTxtFile(argv[1])) mode = Normal;
 			else return false;
 			break;
 			
 		case 3:
-			if(argv[1] == string("Error") && Tools::isTxt(argv[2])){
+			if (argv[1] == string("Error") &&
+				Tools::isTxtFile(argv[2])) {
 				mode = Error;
-			}
-			else return false;
+			} else return false;
 			break;
 			
 		case 4:
-			if(argv[1] == string("Step")
-				&& Tools::isTxt(argv[2]) && Tools::isTxt(argv[3])){
+			if (argv[1] == string("Step") && Tools::isTxtFile(argv[2])
+				&& Tools::isTxtFile(argv[3])) {
 				mode = Step;
-			}
-			else return false;
+			} else return false;
 			break;
 			
 		default:
 			cout << "Incorrect number of parameters" << endl;
 			return false;
 	}
+	return false;
 }

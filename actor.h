@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ACTOR_H
+#define ACTOR_H
+
 #include "tools.h"
 
 class Actor{
@@ -7,19 +9,19 @@ class Actor{
 		Actor(Coordinates& inCoos, unsigned int size);
 		~Actor();
 		
-		Coordinates getCoordinates() const{
-			return coos;
-		}
+		Coordinates getCoordinates() const;
 		
-		unsigned int getSize() const{
-			return size;
-		}
+		unsigned int getSize() const;
 		
-		void display(int&);
+		/*bool isColliding(Actor other){
+			if(Tools::norm(coos - other.coos) > size + other.size) return true;
+			return false;
+		}*/
 		
-		
-	//protected:
+	protected:
 		Coordinates coos;
-		unsigned int const size; //May be the radius(for player/ball) or half-side(for obstacle)
-		//Mettre const sur size?
+		unsigned int const size; 	//May be the radius(for player/ball) 
+									//or half-side(for obstacle)
 };
+
+#endif

@@ -1,4 +1,3 @@
-
 #include "simulation.h"
 #include <iostream>
 #include <fstream>
@@ -9,15 +8,20 @@
 using namespace std;
 
 Simulation::Simulation(Mode mode, string fileName){
-	std::cout << "Using mode : " << mode << std::endl;
+	
+	cout << "Using mode : " << mode << endl;
+	
 	nbCell = -1;
 	nbPlayer = -1;
 	nbObstacle = -1;
 	nbBall = -1;
+	
 	readData(fileName);
 	analyzeData();
 	
-	std::cout << "Data read and analyzed" << std::endl;
+	map = new Map(nbCell);
+	
+	cout << "Data read and analyzed" << endl;
 
 }
 
@@ -25,81 +29,64 @@ Simulation::~Simulation(){
 	
 }
 
-bool Simulation::analyzeData(){
-	/*for(Obstacle obstacle : obstacles){
-		if(obstacle.isInMap() != true) eRRor::outasdfasfd
-		exit
-		;
-	}*/
-	for(int i(0); i<nbPlayer; ++i){
+void Simulation::analyzeData(){
 	
+	Coordinates minDimensions = {-DIM_MAX, -DIM_MAX};
+	Coordinates maxDimensions = {DIM_MAX, DIM_MAX};
 	
-		if ((players[i].getCoordinates().x < -200 ) or (200 < players[i].getCoordinates().x)  
-				or (players[i].getCoordinates().y < -200 ) or (200 < players[i].getCoordinates().y)){ 	
+	for (int i(0); i < nbPlayer; ++i) {
+		if (!(players[i] -> getCoordinates() <= maxDimensions && 
+			players[i] -> getCoordinates() >= minDimensions)) { 	
 				
-				std::cout << PLAYER_OUT(i+1) << std::endl;
-				exit(0);
+			std::cout << PLAYER_OUT(i+1) << std::endl;
+			exit(0);
 		} 
-	
 	}
 	
-	for(int i(0); i<nbBall; ++i){
-	
-	
-		if ((balls[i].getCoordinates().x < -200 ) or (200 < balls[i].getCoordinates().x)  
-				or (balls[i].getCoordinates().y < -200 ) or (200 < balls[i].getCoordinates().y)){ 	
+	for (int i(0); i < nbBall; ++i) {
+		if (!(balls[i] -> getCoordinates() <= maxDimensions &&
+			balls[i] -> getCoordinates() >= minDimensions)) { 	
 				
-				std::cout << BALL_OUT(i+1) << std::endl;
-				exit(0);
-		} 
-	
+			std::cout << BALL_OUT(i+1) << std::endl;
+			exit(0);
+		}
 	}
 	
-	for(int i(0); i<nbObstacle; ++i){
-	
-
-	if (obstacles[i].getCoordinates().x < 0 ) { 
-			std::cout << OBSTACLE_VALUE_INCORRECT(obstacles[i].getCoordinates().x) << std::endl;
-				exit(0);
-			} 
+	for (int i(0); i < nbObstacle; ++i) {
+		
+		double x = obstacles[i] -> getCoordinates().x;
+		double y = obstacles[i] -> getCoordinates().y;
+		
+		if (x < 0 || x > nbCell) { 
+			std::cout << OBSTACLE_VALUE_INCORRECT(x) << std::endl;
+			exit(0);
+		} 
 			
+		if (y < 0 || y > nbCell) { 
+			std::cout << OBSTACLE_VALUE_INCORRECT(y) << std::endl;
+			exit(0);
+		}	
+	}  
 		
-		if (nbCell < obstacles[i].getCoordinates().x) { 
-			std::cout << OBSTACLE_VALUE_INCORRECT(obstacles[i].getCoordinates().x) << std::endl;
-				exit(0);
-			}
+	for (int i(0); i < nbObstacle-1; ++i) { 
 		
-		if (obstacles[i].getCoordinates().y < 0 ) { 
-			std::cout << OBSTACLE_VALUE_INCORRECT(obstacles[i].getCoordinates().y) << std::endl;
-				exit(0);
-			}
+		Coordinates coosI = obstacles[i] -> getCoordinates();
 		
-		if (nbCell < obstacles[i].getCoordinates().y){ 	
-			std::cout << OBSTACLE_VALUE_INCORRECT(obstacles[i].getCoordinates().y) << std::endl;
-				exit(0);
-			}
-		
-		}  
-		
-	for( int i(0); i<nbObstacle-1; ++i) { 
-		for ( int j(i+1); j < nbObstacle; ++j) { 
+		for (int j(i+1); j < nbObstacle; ++j) { 
 			
-			// if (obstacles[i]==obstacles[j]) { faire une surcharge d'opérateur car commence a faire bcp la 
-			if ( (obstacles[i].getCoordinates().x == obstacles[j].getCoordinates().x) and (obstacles[i].getCoordinates().y == obstacles[j].getCoordinates().y) ) {
-				std::cout << MULTI_OBSTACLE(obstacles[i].getCoordinates().x, obstacles[i].getCoordinates().y) << std::endl; 
+			Coordinates coosJ = obstacles[j] -> getCoordinates();
+			
+			if (coosI == coosJ) {
+				cout << MULTI_OBSTACLE(coosI.x, coosI.y) << endl; 
 				exit(0);
 			}
 		}
 	}
-	
-	return false;
 }
-
-
 
 void Simulation::readNumber(ifstream& file, int& value){
 	while(value == -1){
-		std::cout << "while loop" << std::endl;
+		cout << "while loop" << endl;
 		if(!(file >> value)){  //Echec
 			if(file.eof()){
 				cout << value << endl;
@@ -116,13 +103,7 @@ void Simulation::readNumber(ifstream& file, int& value){
 	}
 }
 
-//Is there a defined strict format or yolo?
 void Simulation::readData(string& fileName){
-	/*Tools::Coordinates coos = {3,3};
-	Player player(coos, 3,33,3);
-	players.push_back(player);*/
-	
-	
 	
 	ifstream file;
 	file.open(fileName);
@@ -152,7 +133,7 @@ void Simulation::readData(string& fileName){
 		} else {
 			Coordinates coos = {x,y};
 			Player player(coos, COEF_RAYON_JOUEUR*nbCell, nbTouched, coolDown);
-			players.push_back(player);
+			players.push_back(&player);
 			i++;
 			file.clear();
 			file.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -178,7 +159,7 @@ void Simulation::readData(string& fileName){
 		} else {
 			Coordinates coos = {x,y};
 			Obstacle obstacle(coos, SIDE/nbCell);
-			obstacles.push_back(obstacle);
+			obstacles.push_back(&obstacle);
 			i++;
 			file.clear();
 			file.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -205,14 +186,13 @@ void Simulation::readData(string& fileName){
 		} else {
 			Coordinates coos = {x,y};
 			Ball ball(coos, COEF_RAYON_BALLE*nbCell, angle);
-			balls.push_back(ball);
+			balls.push_back(&ball);
 			i++;
 			file.clear();
 			file.ignore(numeric_limits<streamsize>::max(), '\n');
 			std::cout << "Inserted ball : " << i << std::endl;
 		}
 	} while(i < nbBall);
-	
-	//return true; //If we get to this line, everything went O.K.
+
 	file.close();
 }
