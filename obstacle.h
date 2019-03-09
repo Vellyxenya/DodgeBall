@@ -1,4 +1,6 @@
-#pragma once
+#ifndef OBSTACLE_H
+#define OBSTACLE_H
+
 #include "tools.h"
 #include "actor.h"
 
@@ -8,5 +10,7 @@ class Obstacle : public Actor {
 		~Obstacle();
 		
 	private:
-	//Coordinates coos;
+
 };
+
+#endif

@@ -1,17 +1,20 @@
-#pragma once
+#ifndef MAP_H
+#define MAP_H
+
 #include "actor.h"
 #include "define.h"
 
 class Map{
 	public:
 		
-		Map(int const nbCell);
+		Map(int nbCell);
 		~Map();
 		
-		template <typename T, typename S>
-		bool isColliding(const T& a, const T& b);
+		//Player-Player, Player-Ball, Ball-Ball
+		bool isColliding(Actor actor1, Actor actor2);
 		
-		bool isInMap(Actor actor, double securityMargin);
+		/*template <typename T, typename S>
+		bool isColliding(const T& a, const T& b);*/
 		
 	private:
 		unsigned int nbCell;
@@ -19,3 +22,5 @@ class Map{
 		double MJ;
 	
 };
+
+#endif

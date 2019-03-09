@@ -26,18 +26,19 @@ class Simulation{
 	private:
 		void readData(string& fileName); //return if success or not
 		void readNumber(ifstream& file, int& value);
-		bool analyzeData();
+		void analyzeData();
+		
 		int nbCell;
 		int nbPlayer;
 		int nbObstacle;
 		int nbBall;
 		
-		vector<Player> players;	
-		vector<Ball> balls;
-		vector<Obstacle> obstacles;
+		vector<Player*> players;	
+		vector<Ball*> balls;
+		vector<Obstacle*> obstacles;
 		
-		//Map map; //Use a pointer instead?
-		//Where to read data? Map or Simulation? Better Simulation I think
+		Map* map;
+
 };
 
 #endif

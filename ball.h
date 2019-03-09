@@ -1,4 +1,6 @@
-#pragma once
+#ifndef BALL_H
+#define BALL_H
+
 #include "tools.h"
 #include "actor.h"
 
@@ -10,3 +12,5 @@ class Ball : public Actor{
 	private:
 		double angle;
 };
+
+#endif

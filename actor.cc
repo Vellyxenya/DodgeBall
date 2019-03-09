@@ -3,12 +3,16 @@
 
 Actor::Actor(Coordinates& inCoos, unsigned int size) : coos(inCoos), size(size){
 
-};
+}
 
 Actor::~Actor(){
 	
 }
 
-/*void Actor::display(int&){
-	std::cout <<  << std::endl;
-}*/
+Coordinates Actor::getCoordinates() const{
+	return coos;
+}
+
+unsigned int Actor::getSize() const{
+	return size;
+}
