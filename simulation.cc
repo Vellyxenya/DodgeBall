@@ -1,3 +1,4 @@
+
 #include "simulation.h"
 #include <iostream>
 #include <fstream>
@@ -8,20 +9,15 @@
 using namespace std;
 
 Simulation::Simulation(Mode mode, string fileName){
-	
-	cout << "Using mode : " << mode << endl;
-	
+	std::cout << "Using mode : " << mode << std::endl;
 	nbCell = -1;
 	nbPlayer = -1;
 	nbObstacle = -1;
 	nbBall = -1;
-	
 	readData(fileName);
 	analyzeData();
 	
-	map = new Map(nbCell);
-	
-	cout << "Data read and analyzed" << endl;
+	std::cout << "Data read and analyzed" << std::endl;
 
 }
 
@@ -29,64 +25,43 @@ Simulation::~Simulation(){
 	
 }
 
-void Simulation::analyzeData(){
+
+void Simulation::analyzeActors(char actor, int& value){ 
 	
-	Coordinates minDimensions = {-DIM_MAX, -DIM_MAX};
-	Coordinates maxDimensions = {DIM_MAX, DIM_MAX};
-	
-	for (int i(0); i < nbPlayer; ++i) {
-		if (!(players[i] -> getCoordinates() <= maxDimensions && 
-			players[i] -> getCoordinates() >= minDimensions)) { 	
-				
-			std::cout << PLAYER_OUT(i+1) << std::endl;
-			exit(0);
+	for (int i(0); i<value; ++i) { 
+		
+		switch(actor) { 
+			
+			case 'p' : players[i].analyzePositionPlayer(i+1); break;
+			case 'o' : obstacles[i].analyzePositionObstacle(nbCell); break;
+			case 'b' : balls[i].analyzePositionBall(i+1); break; 
 		} 
-	}
+	} 
 	
-	for (int i(0); i < nbBall; ++i) {
-		if (!(balls[i] -> getCoordinates() <= maxDimensions &&
-			balls[i] -> getCoordinates() >= minDimensions)) { 	
-				
-			std::cout << BALL_OUT(i+1) << std::endl;
-			exit(0);
-		}
-	}
-	
-	for (int i(0); i < nbObstacle; ++i) {
-		
-		double x = obstacles[i] -> getCoordinates().x;
-		double y = obstacles[i] -> getCoordinates().y;
-		
-		if (x < 0 || x > nbCell) { 
-			std::cout << OBSTACLE_VALUE_INCORRECT(x) << std::endl;
-			exit(0);
-		} 
-			
-		if (y < 0 || y > nbCell) { 
-			std::cout << OBSTACLE_VALUE_INCORRECT(y) << std::endl;
-			exit(0);
-		}	
-	}  
-		
-	for (int i(0); i < nbObstacle-1; ++i) { 
-		
-		Coordinates coosI = obstacles[i] -> getCoordinates();
-		
-		for (int j(i+1); j < nbObstacle; ++j) { 
-			
-			Coordinates coosJ = obstacles[j] -> getCoordinates();
-			
-			if (coosI == coosJ) {
-				cout << MULTI_OBSTACLE(coosI.x, coosI.y) << endl; 
-				exit(0);
+	if ( actor == 'o') { 
+		for( int i(0); i<value-1; ++i) { 
+			for ( int j(i+1); j < value; ++j){ 
+				obstacles[i].analyzeDuplicationObstacle(obstacles[j]);  
 			}
-		}
+		} 
 	}
+} 
+
+bool Simulation::analyzeData(){
+	
+	analyzeActors('p', nbPlayer); 
+	analyzeActors('o', nbObstacle); 
+	analyzeActors('b', nbBall); 
+	 
+	
+	return false;
 }
+
+
 
 void Simulation::readNumber(ifstream& file, int& value){
 	while(value == -1){
-		cout << "while loop" << endl;
+		std::cout << "while loop" << std::endl;
 		if(!(file >> value)){  //Echec
 			if(file.eof()){
 				cout << value << endl;
@@ -103,7 +78,13 @@ void Simulation::readNumber(ifstream& file, int& value){
 	}
 }
 
+//Is there a defined strict format or yolo?
 void Simulation::readData(string& fileName){
+	/*Tools::Coordinates coos = {3,3};
+	Player player(coos, 3,33,3);
+	players.push_back(player);*/
+	
+	
 	
 	ifstream file;
 	file.open(fileName);
@@ -133,7 +114,7 @@ void Simulation::readData(string& fileName){
 		} else {
 			Coordinates coos = {x,y};
 			Player player(coos, COEF_RAYON_JOUEUR*nbCell, nbTouched, coolDown);
-			players.push_back(&player);
+			players.push_back(player);
 			i++;
 			file.clear();
 			file.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -159,7 +140,7 @@ void Simulation::readData(string& fileName){
 		} else {
 			Coordinates coos = {x,y};
 			Obstacle obstacle(coos, SIDE/nbCell);
-			obstacles.push_back(&obstacle);
+			obstacles.push_back(obstacle);
 			i++;
 			file.clear();
 			file.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -186,13 +167,14 @@ void Simulation::readData(string& fileName){
 		} else {
 			Coordinates coos = {x,y};
 			Ball ball(coos, COEF_RAYON_BALLE*nbCell, angle);
-			balls.push_back(&ball);
+			balls.push_back(ball);
 			i++;
 			file.clear();
 			file.ignore(numeric_limits<streamsize>::max(), '\n');
 			std::cout << "Inserted ball : " << i << std::endl;
 		}
 	} while(i < nbBall);
-
+	
+	//return true; //If we get to this line, everything went O.K.
 	file.close();
 }

@@ -17,14 +17,14 @@
 	4
 # position of obstacles
 8 5	    # first obstacle
-10 5	    # second obstacle
+10 1	    # second obstacle
 6 5	    # third obstacle
-8 5	    # fourth obstacle
+2 5	    # fourth obstacle
 
 # number of balls
 	3
   200  100	0	# first ball
  -100 -20 1.5	# second ball
- -20 20  -3	# third ball
+ -200 20  -3	# third ball
 
   #	 And that's all

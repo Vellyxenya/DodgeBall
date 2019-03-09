@@ -1,31 +1,30 @@
-#ifndef TOOLS_H
-#define TOOLS_H
-
+#pragma once
 #include <string>
-#include <cmath>
 
 /**
- * Utility functions, structs...
+ * Class containing utility functions
  */
-
-struct Coordinates{
+ 
+ struct Coordinates{
 	double x;
 	double y;
-	
-	bool operator<=(Coordinates& other);
-	bool operator>=(Coordinates& other);
-	bool operator==(Coordinates& other);
-	Coordinates operator-(Coordinates& other);
 };
  
 class Tools{
 	public:
-		//Is it a problem to declaire this static?
-		static bool isTxtFile(std::string fileName);
-		static double norm(Coordinates coo);
+		static bool isTxt(std::string fileName);
+		
+		template <typename T, typename S>
+		bool isColliding(const T& a, const T& b){
+			
+			
+			
+			
+			return true;
+		}
+		
+		
 		
 	private:
 	
 };
-
-#endif
