@@ -15,7 +15,7 @@ Simulation::Simulation(Mode mode, string fileName){
 	nbObstacle = -1;
 	nbBall = -1;
 	readData(fileName);
-	//analyzeData();
+	analyzeData();
 	
 	std::cout << "Data read and analyzed" << std::endl;
 
@@ -31,10 +31,67 @@ bool Simulation::analyzeData(){
 		exit
 		;
 	}*/
-	for(int i(0); i<=nbPlayer; ++i){
+	for(int i(0); i<nbPlayer; ++i){
 	
-		players[i].getCoordinates();
+	
+		if ((players[i].getCoordinates().x < -200 ) or (200 < players[i].getCoordinates().x)  
+				or (players[i].getCoordinates().y < -200 ) or (200 < players[i].getCoordinates().y)){ 	
+				
+				std::cout << PLAYER_OUT(i+1) << std::endl;
+				exit(0);
+		} 
+	
 	}
+	
+	for(int i(0); i<nbBall; ++i){
+	
+	
+		if ((balls[i].getCoordinates().x < -200 ) or (200 < balls[i].getCoordinates().x)  
+				or (balls[i].getCoordinates().y < -200 ) or (200 < balls[i].getCoordinates().y)){ 	
+				
+				std::cout << BALL_OUT(i+1) << std::endl;
+				exit(0);
+		} 
+	
+	}
+	
+	for(int i(0); i<nbObstacle; ++i){
+	
+
+	if (obstacles[i].getCoordinates().x < 0 ) { 
+			std::cout << OBSTACLE_VALUE_INCORRECT(obstacles[i].getCoordinates().x) << std::endl;
+				exit(0);
+			} 
+			
+		
+		if (nbCell < obstacles[i].getCoordinates().x) { 
+			std::cout << OBSTACLE_VALUE_INCORRECT(obstacles[i].getCoordinates().x) << std::endl;
+				exit(0);
+			}
+		
+		if (obstacles[i].getCoordinates().y < 0 ) { 
+			std::cout << OBSTACLE_VALUE_INCORRECT(obstacles[i].getCoordinates().y) << std::endl;
+				exit(0);
+			}
+		
+		if (nbCell < obstacles[i].getCoordinates().y){ 	
+			std::cout << OBSTACLE_VALUE_INCORRECT(obstacles[i].getCoordinates().y) << std::endl;
+				exit(0);
+			}
+		
+		}  
+		
+	for( int i(0); i<nbObstacle-1; ++i) { 
+		for ( int j(i+1); j < nbObstacle; ++j) { 
+			
+			// if (obstacles[i]==obstacles[j]) { faire une surcharge d'opérateur car commence a faire bcp la 
+			if ( (obstacles[i].getCoordinates().x == obstacles[j].getCoordinates().x) and (obstacles[i].getCoordinates().y == obstacles[j].getCoordinates().y) ) {
+				std::cout << MULTI_OBSTACLE(obstacles[i].getCoordinates().x, obstacles[i].getCoordinates().y) << std::endl; 
+				exit(0);
+			}
+		}
+	}
+	
 	return false;
 }
 
@@ -120,7 +177,7 @@ void Simulation::readData(string& fileName){
 			}
 		} else {
 			Coordinates coos = {x,y};
-			Obstacle obstacle(coos);
+			Obstacle obstacle(coos, SIDE/nbCell);
 			obstacles.push_back(obstacle);
 			i++;
 			file.clear();

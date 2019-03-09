@@ -8,6 +8,7 @@
 #include "player.h"
 #include "ball.h"
 #include "obstacle.h"
+#include "error.h" 
 
 using namespace std;
 

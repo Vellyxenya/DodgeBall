@@ -2,11 +2,11 @@
 #include "tools.h"
 #include "actor.h"
 
-class Obstacle{
+class Obstacle : public Actor {
 	public:
-		Obstacle(Coordinates& inCoos);
+		Obstacle(Coordinates& inCoos, unsigned int size);
 		~Obstacle();
 		
 	private:
-	Coordinates coos;
+	//Coordinates coos;
 };
