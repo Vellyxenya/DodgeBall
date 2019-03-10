@@ -1,7 +1,9 @@
 #ifndef ACTOR_H
 #define ACTOR_H
 
+#include <iostream>
 #include "tools.h"
+#include "error.h"
 
 class Actor{
 	public:
@@ -9,16 +11,14 @@ class Actor{
 		Actor(Coordinates& inCoos, unsigned int size);
 		~Actor();
 		
+		virtual void analyzePosition(int index);
+		
 		Coordinates getCoordinates() const;
-		
 		unsigned int getSize() const;
-		
-		/*bool isColliding(Actor other){
-			if(Tools::norm(coos - other.coos) > size + other.size) return true;
-			return false;
-		}*/
-		
+
 	protected:
+		Coordinates minDimensions;
+		Coordinates maxDimensions;
 		Coordinates coos;
 		unsigned int const size; 	//May be the radius(for player/ball) 
 									//or half-side(for obstacle)

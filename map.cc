@@ -1,8 +1,42 @@
 #include "map.h"
 
+using namespace std;
+
 Map::Map(int nbCell) : 	nbCell(nbCell) {
 	MJ = COEF_MARGE_JEU * (SIDE/nbCell);
 	ML = COEF_MARGE_JEU/2 * (SIDE/nbCell);
+}
+
+void Map::analyzeActors(ActorType actorType, int& numberOfActors){ 
+	
+	for (int i(0); i < numberOfActors; ++i) {
+		switch(actorType) { 
+			case PLAYER :
+				players[i].analyzePosition(i); //i+1 est faux
+				break;
+			case OBSTACLE :
+				obstacles[i].analyzePosition(nbCell);
+				break;
+			case BALL :
+				balls[i].analyzePosition(i); //i+1 est faux
+				break; 
+		} 
+	}
+	
+	if (actorType == OBSTACLE) { 
+		for(int i(0); i < numberOfActors; ++i) { //why -1?
+			for (int j(i+1); j < numberOfActors; ++j){ 
+				obstacles[i].analyzeDuplication(obstacles[j]);  
+			}
+		} 
+	}
+}
+
+void Map::analyzeData(){
+	analyzeActors(PLAYER, nbPlayer); 
+	analyzeActors(OBSTACLE, nbObstacle); 
+	analyzeActors(BALL, nbBall); 
+	cout << "Data analyzed" << endl;
 }
 
 void Map::detectCollisions() {
@@ -75,7 +109,6 @@ bool Map::collisionWithObstacle(Actor actor, Obstacle obstacle) {
 	Coordinates obsCoos = toSimulationCoos( obstacle.getCoordinates(),
 											obstacle.getSize());
 	double squareHalfSide = obstacle.getSize() + actor.getSize();
-	std::cout << actor.getSize() << std::endl;
 	double circleRadius = sqrt(2)*obstacle.getSize() + actor.getSize();
 	Square square = {obsCoos, squareHalfSide};
 	Circle circle = {obsCoos, circleRadius};
@@ -107,14 +140,33 @@ bool Map::isColliding(Actor actor1, Actor actor2) const{
 	return false;
 }
 
-std::vector<Player>& Map::getPlayers(){
+vector<Player>& Map::getPlayers(){
 	return players;
 }
 
-std::vector<Ball>& Map::getBalls(){
+vector<Ball>& Map::getBalls(){
 	return balls;
 }
 
-std::vector<Obstacle>& Map::getObstacles(){
+vector<Obstacle>& Map::getObstacles(){
 	return obstacles;
+}
+
+int Map::getNbPlayer() const{
+	return nbPlayer;
+}
+int Map::getNbObstacle() const{
+	return nbObstacle;
+}
+int Map::getNbBall() const{
+	return nbBall;
+}
+void Map::setNbPlayer(int nbPlayerIn){
+	nbPlayer = nbPlayerIn;
+}
+void Map::setNbObstacle(int nbObstacleIn){
+	nbObstacle = nbObstacleIn;
+}
+void Map::setNbBall(int nbBallIn){
+	nbBall = nbBallIn;
 }

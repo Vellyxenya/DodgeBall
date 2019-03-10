@@ -9,3 +9,11 @@ Player::Player(Coordinates& inCoos, unsigned int size,
 Player::~Player(){
 	
 }
+
+void Player::analyzePosition(int index) {
+	Actor::analyzePosition(index);
+	if (!(coos <= maxDimensions &&  coos >= minDimensions)) { 	
+		std::cout << PLAYER_OUT(index+1) << std::endl;
+		exit(0);
+	}
+}

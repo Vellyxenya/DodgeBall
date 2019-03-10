@@ -9,6 +9,9 @@ class Obstacle : public Actor {
 		Obstacle(Coordinates& inCoos, unsigned int size);
 		~Obstacle();
 		
+		void analyzePosition(int NbCell) override; 
+		void analyzeDuplication(Obstacle other);
+		
 	private:
 
 };

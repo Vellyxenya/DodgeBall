@@ -10,7 +10,8 @@ class Player : public Actor{
 		Player(	Coordinates& inCoos, unsigned int size,
 				unsigned int nbTouched, unsigned int coolDown);
 		~Player();
-
+		
+		void analyzePosition(int index); 
 		
 	private:
 		int nbTouched, coolDown;
