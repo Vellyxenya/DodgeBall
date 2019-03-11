@@ -14,13 +14,13 @@ class Actor{
 		virtual void analyzePosition(int index);
 		
 		Coordinates getCoordinates() const;
-		unsigned int getSize() const;
+		double getSize() const;
 
 	protected:
 		Coordinates minDimensions;
 		Coordinates maxDimensions;
 		Coordinates coos;
-		unsigned int const size; 	//May be the radius(for player/ball) 
+		double size; 	//May be the radius(for player/ball) 
 									//or half-side(for obstacle)
 };
 

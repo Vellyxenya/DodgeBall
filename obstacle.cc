@@ -10,12 +10,12 @@ Obstacle::~Obstacle(){
 
 void Obstacle::analyzePosition(int nbCell) {
 
-	if (coos.x < 0 || coos.x > nbCell) { 
+	if (coos.x < 0 || coos.x >= nbCell) { 
 		std::cout << OBSTACLE_VALUE_INCORRECT(coos.x) << std::endl;
 		exit(0);
 	} 
 		
-	if (coos.y < 0 || coos.y > nbCell) { 
+	if (coos.y < 0 || coos.y >= nbCell) { 
 		std::cout << OBSTACLE_VALUE_INCORRECT(coos.y) << std::endl;
 		exit(0);
 	}

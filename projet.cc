@@ -18,7 +18,10 @@ int main(int argc, char* argv[]){
 	
 	Mode mode;
 	
-	chooseMode(argc, argv, mode);
+	if(chooseMode(argc, argv, mode) == false) {
+		cout << "Commande incorrecte" << endl;
+		exit(0);
+	}
 
 	Simulation simulation(mode, argv[2]); //runs simulation
 
@@ -40,7 +43,9 @@ bool chooseMode(int argc, char* argv[], Mode& mode){
 			if (argv[1] == string("Error") &&
 				Tools::isTxtFile(argv[2])) {
 				mode = Error;
-			} else return false;
+			} else {
+				return false;
+			}
 			break;
 			
 		case 4:
@@ -54,5 +59,5 @@ bool chooseMode(int argc, char* argv[], Mode& mode){
 			cout << "Incorrect number of parameters" << endl;
 			return false;
 	}
-	return false;
+	return true;
 }
