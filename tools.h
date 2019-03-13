@@ -37,6 +37,7 @@ class Tools{
 		static double distance(Coordinates coo1, Coordinates coo2);
 		static bool isInSquare(Coordinates coos, Square square);
 		static bool isInCircle(Coordinates coos, Circle circle);
+		static double getHypothenus(double a, double b);
 		
 	private:
 	

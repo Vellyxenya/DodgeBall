@@ -8,20 +8,16 @@
 class Actor{
 	public:
 		Actor();
-		Actor(Coordinates& inCoos, unsigned int size);
+		Actor(Coordinates& inCoos, double size);
 		~Actor();
-		
-		virtual void analyzePosition(int index);
 		
 		Coordinates getCoordinates() const;
 		double getSize() const;
 
 	protected:
-		Coordinates minDimensions;
-		Coordinates maxDimensions;
 		Coordinates coos;
-		double size; 	//May be the radius(for player/ball) 
-									//or half-side(for obstacle)
+		double size; 	//radius(for player/ball) 
+						//half-side(for obstacle)
 };
 
 #endif

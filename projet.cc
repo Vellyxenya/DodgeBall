@@ -1,6 +1,6 @@
 /**
- * Last modified on : 02/03/2019
- * Comments : Mode selection based on input options.
+ * Last modified on : 11/03/2019
+ * Comments : Mode selection based on command line options.
  */
 
 #include <iostream>
@@ -18,7 +18,7 @@ int main(int argc, char* argv[]){
 	
 	Mode mode;
 	
-	if(chooseMode(argc, argv, mode) == false) {
+	if(!chooseMode(argc, argv, mode)) {
 		cout << "Commande incorrecte" << endl;
 		exit(0);
 	}
@@ -43,9 +43,7 @@ bool chooseMode(int argc, char* argv[], Mode& mode){
 			if (argv[1] == string("Error") &&
 				Tools::isTxtFile(argv[2])) {
 				mode = Error;
-			} else {
-				return false;
-			}
+			} else return false;
 			break;
 			
 		case 4:
@@ -57,7 +55,7 @@ bool chooseMode(int argc, char* argv[], Mode& mode){
 			
 		default:
 			cout << "Incorrect number of parameters" << endl;
-			return false;
+			exit(0);
 	}
 	return true;
 }

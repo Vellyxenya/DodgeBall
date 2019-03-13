@@ -27,7 +27,7 @@ class Map{
 		Coordinates toSimulationCoos(Coordinates coos, double side);
 		
 		void analyzeActors(ActorType actor, int& numberOfActors);
-		void analyzeData();
+		void analyzeBounds();
 		
 		void detectCollisions();
 		void playerVsPlayer() const;
@@ -40,10 +40,11 @@ class Map{
 		std::vector<Ball>& getBalls();
 		std::vector<Obstacle>& getObstacles();
 		
+		int getNbCell() const;
 		int getNbPlayer() const;
 		int getNbObstacle() const;
 		int getNbBall() const;
-		
+
 		void setNbPlayer(int nbPlayerIn);
 		void setNbObstacle(int nbObstacleIn);
 		void setNbBall(int nbBallIn);
@@ -60,6 +61,9 @@ class Map{
 		std::vector<Player> players;	
 		std::vector<Ball> balls;
 		std::vector<Obstacle> obstacles;
+		
+		Coordinates minDimensions;
+		Coordinates maxDimensions;
 	
 };
 

@@ -7,11 +7,11 @@
 class Player : public Actor{
 	public:
 		Player();
-		Player(	Coordinates& inCoos, unsigned int size,
+		Player(	Coordinates& inCoos, double size,
 				unsigned int nbTouched, unsigned int coolDown);
 		~Player();
 		
-		void analyzePosition(int index); 
+		void analyzePosition(int index, Coordinates& minDimensions, Coordinates& maxDimensions); 
 		
 	private:
 		int nbTouched, coolDown;

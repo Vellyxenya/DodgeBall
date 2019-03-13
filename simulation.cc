@@ -2,7 +2,6 @@
 #include <fstream>
 
 #define NDEBUG
-#define INVALID_VALUE -1
 
 using namespace std;
 
@@ -12,14 +11,14 @@ Simulation::~Simulation(){
 
 Simulation::Simulation(Mode mode, string fileName){
 	cout << "Using mode : " << mode << endl;
-	nbCell = INVALID_VALUE;
 	
 	readData(fileName);
 	
-	map->analyzeData();
+	map->analyzeBounds();
 	map->detectCollisions();
+	delete map;
 	
-	delete map; //A voir
+	cout << FILE_READING_SUCCESS << endl;
 }
 
 void Simulation::readData(string& fileName){
@@ -51,11 +50,10 @@ void Simulation::readData(string& fileName){
 					retrieveBalls(stream, state, counter); break;
 				case FINISHED : break;
 				case ERROR :
-					cout << "Error" << endl;
+					cout << "An Error occured while reading the file" << endl;
 					exit(0);
 			}
 		}
-		cout << FILE_READING_SUCCESS << endl;
 	} else {
 		cout << "Failed to open file : " << fileName << endl;
 		exit(0);
@@ -65,11 +63,11 @@ void Simulation::readData(string& fileName){
 
 void Simulation::retrieveNbCell(std::istringstream& stream,
 								ReadingState& state){
+	int nbCell;
 	stream >> nbCell;
 	if (nbCell >= MIN_CELL && nbCell <= MAX_CELL) {
 		map = new Map(nbCell);
 		state = NB_PLAYER;
-		cout << "nbCell : " << nbCell << endl;
 	} else state = ERROR;						
 }
 
@@ -108,14 +106,17 @@ void Simulation::retrievePlayers(istringstream& stream,
 	double x, y;
 	int nbTouched, coolDown;
 	if(stream >> x >> y >> nbTouched >> coolDown){
-		Coordinates coos = {x,y};
-		Player player(coos, COEF_RAYON_JOUEUR*(SIDE/nbCell), nbTouched, coolDown);
-		map->getPlayers().push_back(player);
-		counter++;
-		if(counter == map->getNbPlayer()) {
-			state = NB_OBSTACLE;
-			counter = 0;
-		}
+		if(nbTouched >= 0 && nbTouched <= MAX_TOUCH &&
+			coolDown >= 0 && coolDown <= MAX_COUNT){
+			Coordinates coos = {x,y};
+			Player player(coos, COEF_RAYON_JOUEUR*(SIDE/map->getNbCell()), nbTouched, coolDown);
+			map->getPlayers().push_back(player);
+			counter++;
+			if(counter == map->getNbPlayer()) {
+				state = NB_OBSTACLE;
+				counter = 0;
+			}
+		} else state = ERROR;
 	} else state = ERROR;
 }
 
@@ -124,7 +125,7 @@ void Simulation::retrieveObstacles(istringstream& stream,
 	int line, column;
 	if(stream >> line >> column) {
 		Coordinates coos = {(double)line, (double)column}; //see for this...
-		Obstacle obstacle(coos, SIDE/nbCell/2);
+		Obstacle obstacle(coos, SIDE/map->getNbCell()/2);
 		map->getObstacles().push_back(obstacle); //Comment push_back des pointers sans perdre les coordonnées
 		counter++;
 		if(counter == map->getNbObstacle()) {
@@ -139,7 +140,8 @@ void Simulation::retrieveBalls(istringstream& stream,
 	double x, y, angle;
 	if(stream >> x >> y >> angle) {
 		Coordinates coos = {x,y};
-		Ball ball(coos, COEF_RAYON_BALLE*(SIDE/nbCell), angle);
+		Ball ball(coos, COEF_RAYON_BALLE*(SIDE/map->getNbCell()), angle);
+		cout << map->getNbCell() << endl;
 		map->getBalls().push_back(ball);
 		counter++;
 		if(counter == map->getNbBall()) {

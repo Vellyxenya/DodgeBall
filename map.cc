@@ -1,16 +1,18 @@
 #include "map.h"
+#include <cmath>
 
 using namespace std;
 
-#include <cmath>
+Map::~Map(){
+	
+}
 
 Map::Map(int nbCell) : 	nbCell(nbCell) {
 	MJ = COEF_MARGE_JEU * (SIDE/nbCell);
 	ML = COEF_MARGE_JEU/2 * (SIDE/nbCell);
-}
-
-Map::~Map(){
 	
+	minDimensions = {-DIM_MAX, -DIM_MAX};
+	maxDimensions = {DIM_MAX, DIM_MAX};
 }
 
 void Map::analyzeActors(ActorType actorType, int& numberOfActors){ 
@@ -18,14 +20,14 @@ void Map::analyzeActors(ActorType actorType, int& numberOfActors){
 	for (int i(0); i < numberOfActors; ++i) {
 		switch(actorType) { 
 			case PLAYER :
-				players[i].analyzePosition(i);
+				players[i].analyzePosition(i, minDimensions, maxDimensions);
 				break;
 			case OBSTACLE :
 				obstacles[i].analyzePosition(nbCell);
 				break;
 			case BALL :
-				balls[i].analyzePosition(i);
-				break; 
+				balls[i].analyzePosition(i, minDimensions, maxDimensions);
+				break;
 		} 
 	}
 	
@@ -38,10 +40,12 @@ void Map::analyzeActors(ActorType actorType, int& numberOfActors){
 	}
 }
 
-void Map::analyzeData(){
+void Map::analyzeBounds(){
+	
 	analyzeActors(PLAYER, nbPlayer); 
 	analyzeActors(OBSTACLE, nbObstacle); 
-	analyzeActors(BALL, nbBall); 
+	analyzeActors(BALL, nbBall);
+	
 	cout << "Data analyzed" << endl;
 }
 
@@ -114,26 +118,28 @@ bool Map::collisionWithObstacle(Actor actor, Obstacle obstacle) {
 	Coordinates actorCoos = actor.getCoordinates();
 	Coordinates obsCoos = toSimulationCoos( obstacle.getCoordinates(),
 											obstacle.getSize());
-	double hs = obstacle.getSize() + actor.getSize(); //HalfSide of square
-	//double circleRadius = sqrt(2)*obstacle.getSize() + actor.getSize();
+											
+	double halfSide = obstacle.getSize() + actor.getSize();
 	double r = actor.getSize();
-	double circleRadius = sqrt(hs*hs+(r+hs)*(r+hs));
-	Square square = {obsCoos, hs};
-	Circle circle = {obsCoos, circleRadius};
-	Coordinates shift1 = {obstacle.getSize(), obstacle.getSize()};
-	Coordinates shift2 = {obstacle.getSize(), -obstacle.getSize()};
+	double circleRadius = Tools::getHypothenus(halfSide, r+halfSide);
+	double obSize = obstacle.getSize();
+	
+	Square square = {obsCoos, halfSide};
+	Circle mainCircle = {obsCoos, circleRadius};
+	Coordinates shift1 = {obSize, obSize};
+	Coordinates shift2 = {obSize, -obSize};
+	
 	Circle circle1 = {obsCoos+shift1, actor.getSize()};
 	Circle circle2 = {obsCoos+shift2, actor.getSize()};
 	Circle circle3 = {obsCoos-shift1, actor.getSize()};
 	Circle circle4 = {obsCoos-shift2, actor.getSize()};
+	
 	if((Tools::isInSquare(actorCoos, square) &&
-		Tools::isInCircle(actorCoos, circle)) ||
+		Tools::isInCircle(actorCoos, mainCircle)) ||
 		Tools::isInCircle(actorCoos, circle1) ||
 		Tools::isInCircle(actorCoos, circle2) ||
 		Tools::isInCircle(actorCoos, circle3) ||
-		Tools::isInCircle(actorCoos, circle4)) {
-		return true;
-	}
+		Tools::isInCircle(actorCoos, circle4)) return true;
 	return false;
 }
 
@@ -170,21 +176,30 @@ vector<Obstacle>& Map::getObstacles(){
 	return obstacles;
 }
 
+int Map::getNbCell() const{
+	return nbCell;
+}
+
 int Map::getNbPlayer() const{
 	return nbPlayer;
 }
+
 int Map::getNbObstacle() const{
 	return nbObstacle;
 }
+
 int Map::getNbBall() const{
 	return nbBall;
 }
+
 void Map::setNbPlayer(int nbPlayerIn){
 	nbPlayer = nbPlayerIn;
 }
+
 void Map::setNbObstacle(int nbObstacleIn){
 	nbObstacle = nbObstacleIn;
 }
+
 void Map::setNbBall(int nbBallIn){
 	nbBall = nbBallIn;
 }

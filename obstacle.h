@@ -6,10 +6,10 @@
 
 class Obstacle : public Actor {
 	public:
-		Obstacle(Coordinates& inCoos, unsigned int size);
+		Obstacle(Coordinates& inCoos, double size);
 		~Obstacle();
 		
-		void analyzePosition(int NbCell) override; 
+		void analyzePosition(int NbCell); 
 		void analyzeDuplication(Obstacle other);
 		
 	private:

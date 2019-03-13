@@ -15,6 +15,10 @@ double Tools::distance(Coordinates coo1, Coordinates coo2){
 	return norm(coo1 - coo2);
 }
 
+double Tools::getHypothenus(double a, double b){
+	return sqrt(a*a+b*b);
+}
+
 bool Tools::isInSquare(Coordinates coos, Square square) {
 	Coordinates vertexTranslation = {square.halfSide, square.halfSide}; //Is this a magic number??
 	Coordinates min = square.coos - vertexTranslation;

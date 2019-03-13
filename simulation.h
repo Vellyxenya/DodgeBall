@@ -14,12 +14,6 @@ enum Mode{
 	Normal
 };
 
-/*enum ActorType{
-	PLAYER,
-	OBSTACLE,
-	BALL
-};*/
-
 enum ReadingState{
 	NB_CELL,
 	NB_PLAYER,
@@ -38,11 +32,13 @@ class Simulation{
 		~Simulation();
 		
 	private:
+		Map* map;
+	
 		void analyzeActors(ActorType actor, int& numberOfActors);
 	
 		void readData(std::string& fileName); //return if success or not
 		
-		void analyzeData();
+		void analyzeBounds();
 		
 		void retrievePlayers(	std::istringstream& stream,
 								ReadingState& state, int& counter);
@@ -58,10 +54,7 @@ class Simulation{
 								ReadingState& state);
 		void retrieveNbBall(	std::istringstream& stream,
 								ReadingState& state);						
-		
-		int nbCell;
-		Map* map;
-
+	
 };
 
 #endif
