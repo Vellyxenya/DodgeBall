@@ -25,9 +25,9 @@ void Obstacle::analyzePosition(int nbCell) {
 	}
 }
 
-void Obstacle::analyzeDuplication(Obstacle other) { 
+void Obstacle::analyzeDuplication(Obstacle* other) { 
 		
-	if (coos == other.coos) {
+	if (coos == other->coos) {
 		cout << MULTI_OBSTACLE((static_cast<int>(coos.x)),
 		(static_cast<int>(coos.y))) << endl; 
 		exit(0);

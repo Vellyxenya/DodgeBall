@@ -10,6 +10,7 @@ FILE_READING_SUCCESS si le formatage du fichier est correct ou bien s'il n'y a p
 
 Map is a pointer, why and why not?
 Obstacle inherits actor? line/column instead of x,y?
+delete children pointers?
 
 
 Comment the code, look for line overflow (green line)

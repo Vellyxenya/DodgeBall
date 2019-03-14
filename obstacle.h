@@ -10,7 +10,7 @@ class Obstacle : public Actor {
 		~Obstacle();
 		
 		void analyzePosition(int NbCell); 
-		void analyzeDuplication(Obstacle other);
+		void analyzeDuplication(Obstacle* other);
 		
 	private:
 

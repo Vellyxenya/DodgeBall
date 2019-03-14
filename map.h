@@ -22,8 +22,8 @@ class Map{
 		~Map();
 		
 		//Player-Player, Player-Ball, Ball-Ball
-		bool isColliding(Actor actor1, Actor actor2) const;
-		bool collisionWithObstacle(Actor actor, Obstacle obstacle);
+		bool isColliding(Actor* actor1, Actor* actor2) const;
+		bool collisionWithObstacle(Actor* actor, Obstacle* obstacle);
 		Coordinates toSimulationCoos(Coordinates coos, double side);
 		
 		void analyzeActors(ActorType actor, int& numberOfActors);
@@ -36,9 +36,9 @@ class Map{
 		void playerVsObstacle();
 		void ballVsObstacle();
 		
-		std::vector<Player>& getPlayers();
-		std::vector<Ball>& getBalls();
-		std::vector<Obstacle>& getObstacles();
+		std::vector<Player*>& getPlayers();
+		std::vector<Ball*>& getBalls();
+		std::vector<Obstacle*>& getObstacles();
 		
 		int getNbCell() const;
 		int getNbPlayer() const;
@@ -58,9 +58,9 @@ class Map{
 		int nbObstacle;
 		int nbBall;
 		
-		std::vector<Player> players;	
-		std::vector<Ball> balls;
-		std::vector<Obstacle> obstacles;
+		std::vector<Player*> players;	
+		std::vector<Ball*> balls;
+		std::vector<Obstacle*> obstacles;
 		
 		Coordinates minDimensions;
 		Coordinates maxDimensions;
