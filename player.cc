@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "player.h"
 
 using namespace std;
@@ -12,9 +14,11 @@ Player::~Player(){
 	
 }
 
-void Player::analyzePosition(int index, Coordinates& minDimensions, Coordinates& maxDimensions) {
+void Player::analyzePosition(int index, Coordinates& minDimensions,
+							 Coordinates& maxDimensions) {
+								 
 	if (!(coos <= maxDimensions &&  coos >= minDimensions)) { 	
-		std::cout << PLAYER_OUT(index+1) << std::endl;
+		cerr << PLAYER_OUT(index+1) << endl;
 		exit(0);
 	}
 }

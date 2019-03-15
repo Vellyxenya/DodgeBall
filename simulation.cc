@@ -1,9 +1,10 @@
 #include "simulation.h"
 #include <fstream>
-
-#define NDEBUG
+#include <iostream>
 
 using namespace std;
+
+#define FIRST_INDEX 0
 
 Simulation::~Simulation(){
 	
@@ -24,12 +25,11 @@ void Simulation::readData(string& fileName){
 	
 	ReadingState state(NB_CELL);
 	string line;
-	int counter(0);
 	
 	ifstream file(fileName);
 	if(!file.fail()) {
 		while(getline(file >> ws, line) && state != FINISHED) {
-			if(line[0] == '#') continue;
+			if(line[FIRST_INDEX] == '#') continue;
 			istringstream stream(line);
 			
 			switch(state) {
@@ -38,23 +38,24 @@ void Simulation::readData(string& fileName){
 				case NB_PLAYER :
 					retrieveNbPlayer(stream, state); break;
 				case PLAYERS :
-					retrievePlayers(stream, state, counter); break;
+					retrievePlayers(stream, state); break;
 				case NB_OBSTACLE :
 					retrieveNbObstacle(stream, state); break;
 				case OBSTACLES :
-					retrieveObstacles(stream, state, counter); break;
+					retrieveObstacles(stream, state); break;
 				case NB_BALL :
 					retrieveNbBall(stream, state); break;
 				case BALLS :
-					retrieveBalls(stream, state, counter); break;
+					retrieveBalls(stream, state); break;
 				case FINISHED : break;
 				case ERROR :
-					cout << "An Error occured while reading the file" << endl;
+					cerr << "Reading error" << endl;
+					file.close();
 					exit(0);
 			}
 		}
 	} else {
-		cout << "Failed to open file : " << fileName << endl;
+		cerr << "Failed to open : " << fileName << endl;
 		exit(0);
 	}
 	file.close();
@@ -98,7 +99,8 @@ void Simulation::retrieveNbBall(std::istringstream& stream,
 }
 
 void Simulation::retrievePlayers(istringstream& stream,
-								 ReadingState& state, int& counter){
+								 ReadingState& state) {
+	static unsigned int counter(0);
 	double x, y;
 	int nbTouched, coolDown;
 	if(stream >> x >> y >> nbTouched >> coolDown){
@@ -110,33 +112,29 @@ void Simulation::retrievePlayers(istringstream& stream,
 				nbTouched, coolDown);
 			map->getPlayers().push_back(player);
 			counter++;
-			if(counter == map->getNbPlayer()) {
-				state = NB_OBSTACLE;
-				counter = 0;
-			}
+			if(counter == map->getNbPlayer()) state = NB_OBSTACLE;
 		} else state = ERROR;
 	} else state = ERROR;
 }
 
 void Simulation::retrieveObstacles(istringstream& stream,
-								   ReadingState& state, int& counter){
+								   ReadingState& state){
+	static unsigned int counter(0);
 	int line, column;
 	if(stream >> line >> column) {
 		Coordinates coos = {static_cast<double>(line),
-							static_cast<double>(column)}; //static cast?
+							static_cast<double>(column)};
 		Obstacle* obstacle = new Obstacle(coos,
 										  SIDE/map->getNbCell()/2);
 		map->getObstacles().push_back(obstacle);
 		counter++;
-		if(counter == map->getNbObstacle()) {
-			state = NB_BALL;
-			counter = 0;
-		}
+		if(counter == map->getNbObstacle()) state = NB_BALL;
 	} else state = ERROR;
 }
 
 void Simulation::retrieveBalls(istringstream& stream,
-							   ReadingState& state, int& counter){
+							   ReadingState& state){
+	static unsigned int counter(0);
 	double x, y, angle;
 	if(stream >> x >> y >> angle) {
 		Coordinates coos = {x,y};
@@ -144,9 +142,6 @@ void Simulation::retrieveBalls(istringstream& stream,
 							  (SIDE/map->getNbCell()), angle);
 		map->getBalls().push_back(ball);
 		counter++;
-		if(counter == map->getNbBall()) {
-			state = FINISHED;
-			counter = 0;
-		}
+		if(counter == map->getNbBall()) state = FINISHED;
 	} else state = ERROR;
 }

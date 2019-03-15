@@ -1,8 +1,6 @@
 #ifndef 	SIMULATION_H
 #define 	SIMULATION_H
 
-#include <fstream>
-#include <vector>
 #include "define.h"
 #include "tools.h"
 #include "map.h"
@@ -34,18 +32,14 @@ class Simulation{
 	private:
 		Map* map;
 	
-		void analyzeActors(ActorType actor, int& numberOfActors);
-	
-		void readData(std::string& fileName); //return if success or not
-		
-		void analyzeBounds();
+		void readData(std::string& fileName);
 		
 		void retrievePlayers(	std::istringstream& stream,
-								ReadingState& state, int& counter);
+								ReadingState& state);
 		void retrieveBalls(		std::istringstream& stream,
-								ReadingState& state, int& counter);
+								ReadingState& state);
 		void retrieveObstacles(	std::istringstream& stream,
-								ReadingState& state, int& counter);
+								ReadingState& state);
 		void retrieveNbCell(	std::istringstream& stream,
 								ReadingState& state);
 		void retrieveNbPlayer(	std::istringstream& stream,

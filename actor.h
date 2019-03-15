@@ -1,14 +1,13 @@
 #ifndef ACTOR_H
 #define ACTOR_H
 
-#include <iostream>
 #include "tools.h"
 #include "error.h"
 
 class Actor{
 	public:
 		Actor();
-		Actor(Coordinates& inCoos, double size);
+		Actor(Coordinates& inCoos, double radius);
 		~Actor();
 		
 		Coordinates getCoordinates() const;
@@ -16,8 +15,7 @@ class Actor{
 
 	protected:
 		Coordinates coos;
-		double size; 	//radius(for player/ball) 
-						//half-side(for obstacle)
+		double radius;
 };
 
 #endif

@@ -1,7 +1,6 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include <iostream>
 #include <vector>
 
 #include "define.h"
@@ -17,36 +16,30 @@ enum ActorType{
 	BALL
 };
 
+enum CollisionType{
+	PLAYER_VS_PLAYER,
+	BALL_VS_BALL,
+	PLAYER_VS_BALL,
+	PLAYER_VS_OBSTACLE,
+	BALL_VS_OBSTACLE
+};
+
 class Map{
 	public:
 		Map(int nbCells);
 		~Map();
 		
-		//Player-Player, Player-Ball, Ball-Ball
-		bool isColliding(Actor* actor1, Actor* actor2) const;
-		//Player-Obstacle, Ball-Obstacle
-		bool collisionWithObstacle(Actor* actor, Obstacle* obstacle);
-		//Transforms Cell coordinates to Map Coordinates
-		Coordinates toSimulationCoos(Coordinates coos, double side);
-		
-		void analyzeActors(ActorType actor, int& numberOfActors);
-		void analyzeBounds();
-		
+		void analyzeBounds();		
 		void detectCollisions();
-		void playerVsPlayer() const;
-		void playerVsBall() const;
-		void ballVsBall() const;
-		void playerVsObstacle();
-		void ballVsObstacle();
 		
 		std::vector<Player*>& getPlayers();
 		std::vector<Ball*>& getBalls();
 		std::vector<Obstacle*>& getObstacles();
 		
-		int getNbCell() const;
-		int getNbPlayer() const;
-		int getNbObstacle() const;
-		int getNbBall() const;
+		unsigned int getNbCell() const;
+		unsigned int getNbPlayer() const;
+		unsigned int getNbObstacle() const;
+		unsigned int getNbBall() const;
 
 		bool setNbPlayer(int nbPlayerIn);
 		bool setNbObstacle(int nbObstacleIn);
@@ -67,6 +60,30 @@ class Map{
 		
 		Coordinates minDimensions;
 		Coordinates maxDimensions;
+	   
+		//Player-Player, Player-Ball, Ball-Ball
+		bool isColliding(Actor* actor1, Actor* actor2) const;
+		
+		//Player-Obstacle, Ball-Obstacle
+		bool collisionWithObstacle(Actor* actor, Obstacle* obstacle);
+		
+		//Transforms Cell coordinates to Map Coordinates
+		Coordinates toSimulationCoos(const Coordinates& coos,
+									 double side);
+		
+		void analyzeActors(const ActorType& actor, int& numberOfActors);
+		
+		template<typename T, typename S>
+		void actorVsActor(const std::vector<T*>& actors1,
+						  const std::vector<S*>& actors2, 
+						  const CollisionType& collsionType);
+		
+		template<typename T>
+		void actorVsObstacle(const std::vector<T*>& actors,
+							 const CollisionType& collisionType);
+							 
+		void obstacleVsObstacle(const std::vector<Obstacle*>&
+								obstacles);
 };
 
 #endif

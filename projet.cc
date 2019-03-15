@@ -5,10 +5,14 @@
 
 #include <iostream>
 #include <cstring>
-#include <string>
 
 #include "simulation.h"
 #include "tools.h"
+
+#define ONE_ARG 1
+#define TWO_ARG 2
+#define THREE_ARG 3
+#define FOUR_ARG 4
 
 using namespace std;
 
@@ -19,34 +23,34 @@ int main(int argc, char* argv[]){
 	Mode mode;
 	
 	if(!chooseMode(argc, argv, mode)) {
-		cout << "Commande incorrecte" << endl;
+		cerr << "Commande incorrecte" << endl;
 		exit(0);
 	}
 
-	Simulation simulation(mode, argv[2]); //runs simulation
+	Simulation simulation(mode, argv[2]);
 
 	return 0;	
 }
 
 bool chooseMode(int argc, char* argv[], Mode& mode){
 	switch(argc){
-		case 1:
+		case ONE_ARG:
 			mode = Normal;
 			break;
 			
-		case 2:
+		case TWO_ARG:
 			if (Tools::isTxtFile(argv[1])) mode = Normal;
 			else return false;
 			break;
 			
-		case 3:
+		case THREE_ARG:
 			if (argv[1] == string("Error") &&
 				Tools::isTxtFile(argv[2])) {
 				mode = Error;
 			} else return false;
 			break;
 			
-		case 4:
+		case FOUR_ARG:
 			if (argv[1] == string("Step") && Tools::isTxtFile(argv[2])
 				&& Tools::isTxtFile(argv[3])) {
 				mode = Step;

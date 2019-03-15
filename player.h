@@ -11,7 +11,8 @@ class Player : public Actor{
 				unsigned int nbTouched, unsigned int coolDown);
 		~Player();
 		
-		void analyzePosition(int index, Coordinates& minDimensions, Coordinates& maxDimensions); 
+		void analyzePosition(int index, Coordinates& minDimensions,
+							 Coordinates& maxDimensions); 
 		
 	private:
 		int nbTouched, coolDown;

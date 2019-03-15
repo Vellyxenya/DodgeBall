@@ -1,10 +1,14 @@
+#include <iostream>
+
 #include "map.h"
+
+#define FACTOR_TWO 2
 
 using namespace std;
 
 Map::Map(int nbCell) : 	nbCell(nbCell) {
 	MJ = COEF_MARGE_JEU * (SIDE/nbCell);
-	ML = COEF_MARGE_JEU/2 * (SIDE/nbCell);
+	ML = COEF_MARGE_JEU/FACTOR_TWO * (SIDE/nbCell);
 	
 	minDimensions = {-DIM_MAX, -DIM_MAX};
 	maxDimensions = {DIM_MAX, DIM_MAX};
@@ -12,15 +16,16 @@ Map::Map(int nbCell) : 	nbCell(nbCell) {
 
 Map::~Map(){
 	for (Actor* actor : players) delete actor;
-	for (Actor* actor : obstacles) delete actor;
 	for (Actor* actor : balls) delete actor;
+	for (Obstacle* obstacle : obstacles) delete obstacle;
 	players.clear();
-	obstacles.clear();
 	balls.clear();
+	obstacles.clear();
 }
 
-void Map::analyzeActors(ActorType actorType, int& numberOfActors){ 
-	
+void Map::analyzeActors(const ActorType& actorType,
+						int& numberOfActors) {
+							
 	for (int i(0); i < numberOfActors; ++i) {
 		switch(actorType) { 
 			case PLAYER :
@@ -36,14 +41,6 @@ void Map::analyzeActors(ActorType actorType, int& numberOfActors){
 				break;
 		} 
 	}
-	
-	if (actorType == OBSTACLE) { 
-		for(int i(0); i < numberOfActors - 1; ++i) {
-			for (int j(i+1); j < numberOfActors; ++j){ 
-				obstacles[i]->analyzeDuplication(obstacles[j]);  
-			}
-		} 
-	}
 }
 
 void Map::analyzeBounds(){
@@ -53,62 +50,64 @@ void Map::analyzeBounds(){
 }
 
 void Map::detectCollisions() {
-	playerVsPlayer();
-	playerVsBall();
-	ballVsBall();
-	playerVsObstacle();
-	ballVsObstacle();
+	actorVsActor(players, players, PLAYER_VS_PLAYER);
+	actorVsActor(balls, balls, BALL_VS_BALL);
+	actorVsActor(players, balls, PLAYER_VS_BALL);
+	actorVsObstacle(players, PLAYER_VS_OBSTACLE);
+	actorVsObstacle(balls, BALL_VS_OBSTACLE);
+	obstacleVsObstacle(obstacles);
 }
 
-void Map::playerVsPlayer() const {
-	for(size_t i(0); i <= players.size(); ++i){
-		for(size_t j(i+1); j < players.size(); ++j){
-			if(isColliding(players[i], players[j])) {
-				cout << PLAYER_COLLISION(i+1, j+1) << endl;
+void Map::obstacleVsObstacle(const vector<Obstacle*>& obstacles) {
+	for(size_t i(0); i < obstacles.size() -1; ++i) {
+		for (size_t j(i+1); j < obstacles.size(); ++j){ 
+			obstacles[i]->analyzeDuplication(obstacles[j]);  
+		}
+	} 
+}
+
+template<typename T, typename S>
+void Map::actorVsActor(const vector<T*>& actors1,
+					   const vector<S*>& actors2,
+					   const CollisionType& collisionType) {
+						   
+	for(size_t i(0); i <= actors1.size(); ++i){
+		for(size_t j(i+1); j < actors2.size(); ++j){
+			if(isColliding(actors1[i], actors2[j])) {
+				switch(collisionType) {
+					case PLAYER_VS_PLAYER :
+						cerr << PLAYER_COLLISION(i+1, j+1) << endl;
+						break;
+					case BALL_VS_BALL :
+						cerr << BALL_COLLISION(i+1, j+1) << endl;
+						break;
+					case PLAYER_VS_BALL :
+						cerr << PLAYER_BALL_COLLISION(i+1, j+1) << endl;
+						break;
+					default :
+						break;
+				}
 				exit(0);
 			}
 		}
 	}
 }
 
-void Map::playerVsBall() const {
-	for(size_t i(0); i < players.size(); ++i){
-		for(size_t j(0); j < balls.size(); ++j){
-			if(isColliding(players[i], balls[j])) {
-				cout << PLAYER_BALL_COLLISION(i+1, j+1) << endl;
-				exit(0);
-			}
-		}
-	}
-}
-
-void Map::ballVsBall() const {
-	for(size_t i(0); i < balls.size(); ++i){
-		for(size_t j(i+1); j < balls.size(); ++j){
-			if(isColliding(balls[i], balls[j])) {
-				cout << BALL_COLLISION(i+1, j+1) << endl;
-				exit(0);
-			}
-		}
-	}
-}
-
-void Map::playerVsObstacle() {
-	for(size_t i(0); i < players.size(); ++i){
+template<typename T>
+void Map::actorVsObstacle(const vector<T*>& actors,
+						  const CollisionType& collisionType) {
+							  
+	for(size_t i(0); i < actors.size(); ++i){
 		for(size_t j(0); j < obstacles.size(); ++j){
-			if(collisionWithObstacle(players[i], obstacles[j])) {
-				cout << COLL_OBST_PLAYER(j+1, i+1) << endl;
-				exit(0);
-			}
-		}
-	}
-}
-
-void Map::ballVsObstacle() {
-	for(size_t i(0); i < balls.size(); ++i){
-		for(size_t j(0); j < obstacles.size(); ++j){
-			if(collisionWithObstacle(balls[i], obstacles[j])) {
-				cout << COLL_BALL_OBSTACLE(i+1) << endl;
+			if(collisionWithObstacle(actors[i], obstacles[j])) {
+				switch(collisionType){
+					case PLAYER_VS_OBSTACLE :
+						cerr << COLL_OBST_PLAYER(j+1, i+1) << endl;
+					case BALL_VS_OBSTACLE:
+						cerr << COLL_BALL_OBSTACLE(i+1) << endl;
+					default :
+						break;
+				}
 				exit(0);
 			}
 		}
@@ -144,10 +143,12 @@ bool Map::collisionWithObstacle(Actor* actor, Obstacle* obstacle) {
 	return false;
 }
 
-Coordinates Map::toSimulationCoos(Coordinates coos, double halfSide){
+Coordinates Map::toSimulationCoos(const Coordinates& coos,
+								  double halfSide) {
+									  
 	Coordinates simulationCoos =
-		{coos.y * 2 * halfSide + halfSide - DIM_MAX,
-		-(coos.x * 2 * halfSide + halfSide - DIM_MAX)};
+		{coos.y * FACTOR_TWO * halfSide + halfSide - DIM_MAX,
+		-(coos.x * FACTOR_TWO * halfSide + halfSide - DIM_MAX)};
 	return simulationCoos;
 }
 
@@ -158,9 +159,7 @@ bool Map::isColliding(Actor* actor1, Actor* actor2) const{
 	double size2 = actor2->getSize();
 	
 	double distance = Tools::distance(coos1, coos2) ;
-	if (distance < (size1 + size2 + ML)) {
-		return true;
-	}
+	if (distance < (size1 + size2 + ML)) return true;
 	return false;
 }
 
@@ -176,19 +175,19 @@ vector<Obstacle*>& Map::getObstacles(){
 	return obstacles;
 }
 
-int Map::getNbCell() const{
+unsigned int Map::getNbCell() const{
 	return nbCell;
 }
 
-int Map::getNbPlayer() const{
+unsigned int Map::getNbPlayer() const{
 	return nbPlayer;
 }
 
-int Map::getNbObstacle() const{
+unsigned int Map::getNbObstacle() const{
 	return nbObstacle;
 }
 
-int Map::getNbBall() const{
+unsigned int Map::getNbBall() const{
 	return nbBall;
 }
 

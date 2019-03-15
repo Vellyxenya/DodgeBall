@@ -9,7 +9,8 @@ class Ball : public Actor{
 		Ball(Coordinates& inCoos, double size, double angle);
 		~Ball();
 		
-		void analyzePosition(int index, Coordinates& minDimensions, Coordinates& maxDimensions);
+		void analyzePosition(int index, Coordinates& minDimensions,
+							 Coordinates& maxDimensions);
 		
 	private:
 		double angle;

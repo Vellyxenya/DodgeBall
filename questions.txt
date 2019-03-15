@@ -1,15 +1,4 @@
-What is Maxline?
-What about all the error messages like "could not open file", "filed successfully opened", "data analyzed" etc...
-Is it ok to put isTxtFile in Tools?
-Is it okay to have all the other modes for the Rendu1?
-In simulation.cc:129, is it okay to cast directly using (double)?
-Is static okay in tools.h?
-FILE_READING_SUCCESS si le formatage du fichier est correct ou bien s'il n'y a pas de collisions etc...?
-hard coded integers?
-
-
-Map is a pointer, why and why not?
-Obstacle inherits actor? line/column instead of x,y?
-
+Fichier bash
+Git
 
 Comment the code, look for line overflow (green line)
