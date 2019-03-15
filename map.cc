@@ -63,16 +63,18 @@ void Map::obstacleVsObstacle(const vector<Obstacle*>& obstacles) {
 		for (size_t j(i+1); j < obstacles.size(); ++j){ 
 			obstacles[i]->analyzeDuplication(obstacles[j]);  
 		}
-	} 
+	}
 }
 
 template<typename T, typename S>
 void Map::actorVsActor(const vector<T*>& actors1,
 					   const vector<S*>& actors2,
 					   const CollisionType& collisionType) {
-						   
-	for(size_t i(0); i <= actors1.size(); ++i){
-		for(size_t j(i+1); j < actors2.size(); ++j){
+	for(size_t i(0); i < actors1.size(); ++i){
+		int init;
+		if(typeid(T) == typeid(S)) init = i+1;
+		else init = 0;
+		for(size_t j(init); j < actors2.size(); ++j){
 			if(isColliding(actors1[i], actors2[j])) {
 				switch(collisionType) {
 					case PLAYER_VS_PLAYER :
@@ -103,8 +105,10 @@ void Map::actorVsObstacle(const vector<T*>& actors,
 				switch(collisionType){
 					case PLAYER_VS_OBSTACLE :
 						cerr << COLL_OBST_PLAYER(j+1, i+1) << endl;
+						break;
 					case BALL_VS_OBSTACLE:
 						cerr << COLL_BALL_OBSTACLE(i+1) << endl;
+						break;
 					default :
 						break;
 				}

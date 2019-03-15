@@ -1,4 +1,4 @@
-Fichier bash
 Git
 
-Comment the code, look for line overflow (green line)
+Comment the code
+Actor Vs Actor etc, in for-loops -1?
