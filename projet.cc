@@ -54,8 +54,7 @@ bool chooseMode(int argc, char* argv[], Mode& mode){
 			break;
 			
 		default:
-			cout << "Incorrect number of parameters" << endl;
-			exit(0);
+			return false;
 	}
 	return true;
 }

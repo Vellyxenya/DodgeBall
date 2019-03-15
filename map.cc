@@ -1,11 +1,6 @@
 #include "map.h"
-#include <cmath>
 
 using namespace std;
-
-Map::~Map(){
-	
-}
 
 Map::Map(int nbCell) : 	nbCell(nbCell) {
 	MJ = COEF_MARGE_JEU * (SIDE/nbCell);
@@ -15,18 +10,29 @@ Map::Map(int nbCell) : 	nbCell(nbCell) {
 	maxDimensions = {DIM_MAX, DIM_MAX};
 }
 
+Map::~Map(){
+	for (Actor* actor : players) delete actor;
+	for (Actor* actor : obstacles) delete actor;
+	for (Actor* actor : balls) delete actor;
+	players.clear();
+	obstacles.clear();
+	balls.clear();
+}
+
 void Map::analyzeActors(ActorType actorType, int& numberOfActors){ 
 	
 	for (int i(0); i < numberOfActors; ++i) {
 		switch(actorType) { 
 			case PLAYER :
-				players[i]->analyzePosition(i, minDimensions, maxDimensions);
+				players[i]->analyzePosition(i, minDimensions,
+											maxDimensions);
 				break;
 			case OBSTACLE :
 				obstacles[i]->analyzePosition(nbCell);
 				break;
 			case BALL :
-				balls[i]->analyzePosition(i, minDimensions, maxDimensions);
+				balls[i]->analyzePosition(i, minDimensions,
+										  maxDimensions);
 				break;
 		} 
 	}
@@ -41,12 +47,9 @@ void Map::analyzeActors(ActorType actorType, int& numberOfActors){
 }
 
 void Map::analyzeBounds(){
-	
 	analyzeActors(PLAYER, nbPlayer); 
 	analyzeActors(OBSTACLE, nbObstacle); 
 	analyzeActors(BALL, nbBall);
-	
-	cout << "Data analyzed" << endl;
 }
 
 void Map::detectCollisions() {
@@ -55,8 +58,6 @@ void Map::detectCollisions() {
 	ballVsBall();
 	playerVsObstacle();
 	ballVsObstacle();
-	
-	cout << "No collisions detected" << endl;
 }
 
 void Map::playerVsPlayer() const {
@@ -150,7 +151,6 @@ Coordinates Map::toSimulationCoos(Coordinates coos, double halfSide){
 	return simulationCoos;
 }
 
-//Player-Player, Player-Ball, Ball-Ball
 bool Map::isColliding(Actor* actor1, Actor* actor2) const{
 	Coordinates coos1 = actor1->getCoordinates();
 	Coordinates coos2 = actor2->getCoordinates();
@@ -192,14 +192,26 @@ int Map::getNbBall() const{
 	return nbBall;
 }
 
-void Map::setNbPlayer(int nbPlayerIn){
-	nbPlayer = nbPlayerIn;
+bool Map::setNbPlayer(int nbPlayerIn){
+	if(nbPlayerIn >= 0) {
+		nbPlayer = nbPlayerIn;
+		return true;
+	}
+	return false;
 }
 
-void Map::setNbObstacle(int nbObstacleIn){
-	nbObstacle = nbObstacleIn;
+bool Map::setNbObstacle(int nbObstacleIn){
+	if(nbObstacleIn >= 0) {
+		nbObstacle = nbObstacleIn;
+		return true;
+	}
+	return false;
 }
 
-void Map::setNbBall(int nbBallIn){
-	nbBall = nbBallIn;
+bool Map::setNbBall(int nbBallIn){
+	if(nbBallIn >= 0) {
+		nbBall = nbBallIn;
+		return true;
+	}
+	return false;
 }

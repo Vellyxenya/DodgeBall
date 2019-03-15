@@ -2,7 +2,8 @@
 
 using namespace std;
 
-Obstacle::Obstacle(Coordinates& inCoos, double size) : Actor(inCoos, size){
+Obstacle::Obstacle(Coordinates& inCoos, double size) :
+				   Actor(inCoos, size){
 	
 }
 

@@ -3,12 +3,13 @@
 
 #include <iostream>
 #include <vector>
-#include "actor.h"
+
 #include "define.h"
+#include "error.h"
+#include "actor.h"
 #include "player.h"
 #include "ball.h"
 #include "obstacle.h"
-#include "error.h"
 
 enum ActorType{
 	PLAYER,
@@ -23,7 +24,9 @@ class Map{
 		
 		//Player-Player, Player-Ball, Ball-Ball
 		bool isColliding(Actor* actor1, Actor* actor2) const;
+		//Player-Obstacle, Ball-Obstacle
 		bool collisionWithObstacle(Actor* actor, Obstacle* obstacle);
+		//Transforms Cell coordinates to Map Coordinates
 		Coordinates toSimulationCoos(Coordinates coos, double side);
 		
 		void analyzeActors(ActorType actor, int& numberOfActors);
@@ -45,9 +48,9 @@ class Map{
 		int getNbObstacle() const;
 		int getNbBall() const;
 
-		void setNbPlayer(int nbPlayerIn);
-		void setNbObstacle(int nbObstacleIn);
-		void setNbBall(int nbBallIn);
+		bool setNbPlayer(int nbPlayerIn);
+		bool setNbObstacle(int nbObstacleIn);
+		bool setNbBall(int nbBallIn);
 		
 	private:
 		unsigned int nbCell;
@@ -64,7 +67,6 @@ class Map{
 		
 		Coordinates minDimensions;
 		Coordinates maxDimensions;
-	
 };
 
 #endif

@@ -1,4 +1,3 @@
-#include "string"
 #include "tools.h"
 
 bool Tools::isTxtFile(std::string fileName){
@@ -20,7 +19,7 @@ double Tools::getHypothenus(double a, double b){
 }
 
 bool Tools::isInSquare(Coordinates coos, Square square) {
-	Coordinates vertexTranslation = {square.halfSide, square.halfSide}; //Is this a magic number??
+	Coordinates vertexTranslation = {square.halfSide, square.halfSide};
 	Coordinates min = square.coos - vertexTranslation;
 	Coordinates max = square.coos + vertexTranslation;
 	if(coos >= min && coos <= max){
