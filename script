@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+echo "HELLO!"
+
+counter=1
+
+until [ $counter -gt 9 ]
+do
+	echo Test File $counter :
+	./projet Error Tests/E0$counter.txt
+	((counter++))
+	echo " "
+done
+
+echo FINISHED
+
