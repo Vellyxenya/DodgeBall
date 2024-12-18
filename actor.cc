@@ -1,7 +1,7 @@
 #include "actor.h"
-#include <iostream>
 
-Actor::Actor(Coordinates& inCoos, unsigned int size) : coos(inCoos), size(size){
+Actor::Actor(Coordinates& inCoos, double radius) :
+			 coos(inCoos), radius(radius){
 
 }
 
@@ -13,6 +13,6 @@ Coordinates Actor::getCoordinates() const{
 	return coos;
 }
 
-unsigned int Actor::getSize() const{
-	return size;
+double Actor::getSize() const{
+	return radius;
 }

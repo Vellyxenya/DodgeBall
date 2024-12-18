@@ -6,8 +6,11 @@
 
 class Ball : public Actor{
 	public:
-		Ball(Coordinates& inCoos, unsigned int size, double angle);
+		Ball(Coordinates& inCoos, double size, double angle);
 		~Ball();
+		
+		void analyzePosition(int index, Coordinates& minDimensions,
+							 Coordinates& maxDimensions);
 		
 	private:
 		double angle;

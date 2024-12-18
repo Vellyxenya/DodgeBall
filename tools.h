@@ -31,12 +31,13 @@ struct Circle{
  
 class Tools{
 	public:
-		//Is it a problem to declaire this static?
+		Tools() = delete;
 		static bool isTxtFile(std::string fileName);
 		static double norm(Coordinates coo);
 		static double distance(Coordinates coo1, Coordinates coo2);
 		static bool isInSquare(Coordinates coos, Square square);
 		static bool isInCircle(Coordinates coos, Circle circle);
+		static double getHypothenus(double a, double b);
 		
 	private:
 	

@@ -2,15 +2,22 @@
 #define OBSTACLE_H
 
 #include "tools.h"
-#include "actor.h"
+#include "error.h"
 
-class Obstacle : public Actor {
+class Obstacle {
 	public:
-		Obstacle(Coordinates& inCoos, unsigned int size);
+		Obstacle(Coordinates& inCoos, double halfSide);
 		~Obstacle();
 		
+		void analyzePosition(int NbCell); 
+		void analyzeDuplication(Obstacle* other);
+		
+		Coordinates getCoordinates() const;
+		double getSize() const;
+		
 	private:
-
+		Coordinates coos;
+		double halfSide;
 };
 
 #endif

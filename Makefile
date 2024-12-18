@@ -30,14 +30,14 @@ clean:
 # -- Regles de dependances generees automatiquement
 #
 # DO NOT DELETE THIS LINE
-ball.o: ball.cc ball.h tools.h actor.h
-map.o: map.cc map.h actor.h tools.h define.h player.h ball.h obstacle.h \
- error.h
-player.o: player.cc player.h tools.h actor.h
+ball.o: ball.cc ball.h tools.h actor.h error.h define.h
+map.o: map.cc map.h actor.h tools.h error.h define.h player.h ball.h \
+ obstacle.h
+player.o: player.cc player.h tools.h actor.h error.h define.h
 tools.o: tools.cc tools.h
-projet.o: projet.cc simulation.h define.h tools.h map.h actor.h player.h \
- ball.h obstacle.h error.h
+projet.o: projet.cc simulation.h define.h tools.h map.h actor.h error.h \
+ player.h ball.h obstacle.h
 simulation.o: simulation.cc simulation.h define.h tools.h map.h actor.h \
- player.h ball.h obstacle.h error.h
-obstacle.o: obstacle.cc obstacle.h tools.h actor.h
-actor.o: actor.cc actor.h tools.h
+ error.h player.h ball.h obstacle.h
+obstacle.o: obstacle.cc obstacle.h tools.h actor.h error.h define.h
+actor.o: actor.cc actor.h tools.h error.h define.h

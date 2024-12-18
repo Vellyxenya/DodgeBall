@@ -2,26 +2,20 @@
 #define ACTOR_H
 
 #include "tools.h"
+#include "error.h"
 
 class Actor{
 	public:
 		Actor();
-		Actor(Coordinates& inCoos, unsigned int size);
+		Actor(Coordinates& inCoos, double radius);
 		~Actor();
 		
 		Coordinates getCoordinates() const;
-		
-		unsigned int getSize() const;
-		
-		/*bool isColliding(Actor other){
-			if(Tools::norm(coos - other.coos) > size + other.size) return true;
-			return false;
-		}*/
-		
+		double getSize() const;
+
 	protected:
 		Coordinates coos;
-		unsigned int const size; 	//May be the radius(for player/ball) 
-									//or half-side(for obstacle)
+		double radius;
 };
 
 #endif
